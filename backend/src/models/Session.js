@@ -22,6 +22,7 @@ const sessionSchema = new mongoose.Schema({
     }
 )
 
+//tự xóa khi hết hạn token
 sessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 })
 
 export default mongoose.model('Session', sessionSchema)
