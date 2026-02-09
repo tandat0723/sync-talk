@@ -6,6 +6,8 @@ import { Label } from "../ui/label"
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAuthStore } from "@/stores/useAuthStore"
+import { useNavigate } from "react-router"
 
 const signUpSchema = z.object({
   firstname: z.string().min(1, 'Tên bắt buộc phải có'),
@@ -18,12 +20,19 @@ const signUpSchema = z.object({
 type SignUpFormValues = z.infer<typeof signUpSchema>
 
 export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
+  const { signUp } = useAuthStore()
+  const navigate = useNavigate()
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema)
   })
 
   const onSubmit = async (data: SignUpFormValues) => {
-    // goi backend de signup
+    const { firstname, lastname, username, email, password } = data
+
+    // call backend to signup
+    await signUp(username, firstname, lastname, email, password)
+    navigate('/signin')
   }
 
   return (
@@ -68,7 +77,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
               {/* username */}
               <div className="flex flex-col gap-3">
                 <Label htmlFor="username" className="block text-sm">Tên đăng nhập</Label>
-                <Input type="text" id="usertname" placeholder="mess" {...register('username')} />
+                <Input type="text" id="username" placeholder="mess" {...register('username')} />
                 {errors.username && (
                   <p className="text-destructive text-sm">
                     {errors.username.message}
@@ -90,7 +99,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
               {/* password */}
               <div className="flex flex-col gap-3">
                 <Label htmlFor="password" className="block text-sm">Password</Label>
-                <Input type="text" id="password" {...register('password')} />
+                <Input type="password" id="password" {...register('password')} />
                 {errors.password && (
                   <p className="text-destructive text-sm">
                     {errors.password.message}
