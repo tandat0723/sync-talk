@@ -64,7 +64,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
                             {/* password */}
                             <div className="flex flex-col gap-3">
                                 <Label htmlFor="password" className="block text-sm">Password</Label>
-                                <Input type="text" id="password" {...register('password')} />
+                                <Input type="password" id="password" {...register('password')} />
                                 {errors.password && (
                                     <p className="text-destructive text-sm">
                                         {errors.password.message}
