@@ -21,4 +21,6 @@ export interface AuthState {
     clearState: () => void
 
     signOut: () => Promise<void>
+
+    fetchMe: () => Promise<void>
 }
